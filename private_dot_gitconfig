@@ -1,0 +1,60 @@
+[user]
+	name = Cory Locklear
+	email = clocklear@rvohealth.com
+#	signingkey = ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDps/H4SNwRQ0ePHbfwRAxWKRA1LSMZxEWHUKCl6V1hivvYOvucI2cEy5y69Kk4qbvPcqlP4ADMQJSrTUfwnS2Gk5qxXLTaSaVgPx83fYmUCj02mOlXSXGq9wG/QvfzP8A0QmaUWQL3pMaLTS3So8vZ1Zwwi6fLd7KOXZb7iIqewzAvimYkgP7yGmPLfKwdjCM68FM5V9wU6yF6fu03BX/wwqqvj6qlFIaxXjw2wGPUFiWee8lr8II62YMF+K/b+ay4Zu8POWa+psiC28a9zjgh9P/E+nFp6ixWIzEUL0Q9ZMayKxyN84NJodxD0N/sI+rmnCHCJ2Dq0vpv6gqKejh/
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIOZmBAOu3kxXVMd9GMPK/dcwVLgPS5xfACPGfQVfd10
+[url "ssh://git@github.com/"]
+	insteadOf = https://github.com/
+[mergetool]
+	keepBackup = true
+[core]
+	excludesfile = /Users/clocklear/.gitignore_global
+	editor = /usr/bin/vim
+	preloadindex = true
+	fscache = true
+	quotepath = false
+[init]
+	defaultBranch = main
+[push]
+	default = current
+[commit]
+	template = /Users/clocklear/.stCommitMsg
+	gpgsign = true
+[gpg]
+	format = ssh
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[alias]
+    set-upstream = \
+       !git branch \
+		--set-upstream-to=origin/`git symbolic-ref --short HEAD`
+	prune-origin = \
+		!git remote prune origin && git branch -vv | cut -c 3- | awk '$3 !~/\\[/ { print $1 }' | xargs git branch -d
+	force-prune-origin = \
+		!git remote prune origin && git branch -vv | cut -c 3- | awk '$3 !~/\\[/ { print $1 }' | xargs git branch -D
+    prune-origin-force = \
+        !git remote prune origin && git branch -vv | cut -c 3- | awk '$3 !~/\\[/ { print $1 }' | xargs git branch -D
+	last-commit = \
+		!git rev-parse HEAD
+	rollback = \
+		!git reset HEAD~
+[pull]
+	rebase = false
+	#ff = only
+[gpg "ssh"]
+	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+[core]
+	pager = delta
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	navigate = true
+	light = false
+	side-by-side = true
+[merge]
+	conflictstyle = diff3
+[diff]
+	colorMoved = default
