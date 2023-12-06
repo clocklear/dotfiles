@@ -1,7 +1,6 @@
 [user]
 	name = Cory Locklear
 	email = clocklear@rvohealth.com
-#	signingkey = ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDps/H4SNwRQ0ePHbfwRAxWKRA1LSMZxEWHUKCl6V1hivvYOvucI2cEy5y69Kk4qbvPcqlP4ADMQJSrTUfwnS2Gk5qxXLTaSaVgPx83fYmUCj02mOlXSXGq9wG/QvfzP8A0QmaUWQL3pMaLTS3So8vZ1Zwwi6fLd7KOXZb7iIqewzAvimYkgP7yGmPLfKwdjCM68FM5V9wU6yF6fu03BX/wwqqvj6qlFIaxXjw2wGPUFiWee8lr8II62YMF+K/b+ay4Zu8POWa+psiC28a9zjgh9P/E+nFp6ixWIzEUL0Q9ZMayKxyN84NJodxD0N/sI+rmnCHCJ2Dq0vpv6gqKejh/
 	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIOZmBAOu3kxXVMd9GMPK/dcwVLgPS5xfACPGfQVfd10
 [url "ssh://git@github.com/"]
 	insteadOf = https://github.com/
