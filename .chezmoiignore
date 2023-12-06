@@ -1,6 +1,6 @@
 .oh-my-zsh/cache
 .vim/bundle/copilot.vim/doc/tags
-.oh-my-zsh/custom/themes/powerlevel10k
+
 README.md
 {{- if not .workmachine }}
 .gh-repo-standardize/rvo-redplatform.settings.json
