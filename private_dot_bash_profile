@@ -1,0 +1,14 @@
+export LANG=en_US.UTF-8
+
+STARTCOLOR="\[\e[34m\]";
+ENDCOLOR="\[\e[0m\]";
+PS1="$STARTCOLOR\u \w$ENDCOLOR \$ ";
+
+
+
+alias ll='ls -lGh $@'
+
+
+
+
+
