@@ -20,3 +20,7 @@
 	url = "https://github.com/clocklear/af-magic-shlvl/archive/main.tar.gz"
 	exact = true
 	stripComponents = 1
+[".vim/autoload/pathogen.vim"]
+	type = "file"
+	url = "https://tpo.pe/pathogen.vim"
+	refreshPeriod = "672h"
