@@ -159,7 +159,7 @@ alias grs-rp='gh-repo-standardize -s ~/.gh-repo-standardize/rvo-redplatform.sett
 # Displays current shell level
 function prompt_shell_level() {
   if [ $SHLVL -gt 1 ]; then
-    p10k segment -f orange -i '' -t "$SHLVL"
+    p10k segment -f 208 -i '' -t "lvl $SHLVL"
   fi
 }
 
@@ -167,8 +167,13 @@ function prompt_shell_level() {
 function prompt_aws_account_alias() {
   if [ ! -z $AWS_ACCESS_KEY_ID ]; then
     # Define color
-    COLOR="orange"
-    AWS_ACCOUNT_ALIAS="$(aws iam list-account-aliases | jq -r ".AccountAliases[0]")"
+    COLOR=214
+
+	# Check if alias is not already set
+    if [ -z $AWS_ACCOUNT_ALIAS ]; then
+      AWS_ACCOUNT_ALIAS="$(aws iam list-account-aliases | jq -r ".AccountAliases[0]")"
+    fi
+
     if [[ $AWS_ACCOUNT_ALIAS == *"-prod"* ]]; then
       COLOR="red"
     fi
