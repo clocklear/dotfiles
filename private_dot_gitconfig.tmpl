@@ -1,7 +1,7 @@
 [user]
-	name = Cory Locklear
-	email = clocklear@rvohealth.com
-	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIOZmBAOu3kxXVMd9GMPK/dcwVLgPS5xfACPGfQVfd10
+	name = {{ .name }}
+	email = {{ .email }}
+	signingkey = {{ .signingkey }}
 [url "ssh://git@github.com/"]
 	insteadOf = https://github.com/
 [mergetool]
@@ -17,7 +17,7 @@
 [push]
 	default = current
 [commit]
-	template = /Users/clocklear/.stCommitMsg
+	template = /Users/{{ .username }}/.stCommitMsg
 	gpgsign = true
 [gpg]
 	format = ssh
@@ -43,8 +43,10 @@
 [pull]
 	rebase = false
 	#ff = only
+{{- if .workmachine }}
 [gpg "ssh"]
 	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+{{- end }}
 [core]
 	pager = delta
 [interactive]
