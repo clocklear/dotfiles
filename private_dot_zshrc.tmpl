@@ -64,7 +64,7 @@ antigen bundle lukechilds/zsh-nvm
 
 typeset -U path cdpath fpath
 setopt auto_cd
-cdpath=($HOME/Code/github.com/rvohealth $HOME/Code/github.com/rvo-redplatform $HOME/Code/github.com/clocklear)
+cdpath=({{ .cdpath }})
 
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*:descriptions' format %d
@@ -106,6 +106,9 @@ function go() {
         ;;
   esac
 }
+
+{{- if .workmachine }}
+
 # BEGIN_AWS_SSO_CLI
 
 # AWS SSO requires `bashcompinit` which needs to be enabled once and
@@ -149,12 +152,14 @@ complete -C /opt/homebrew/bin/aws-sso aws-sso
 
 # END_AWS_SSO_CLI
 alias av='aws-vault exec $@'
-alias gitclean='git branch --merged | grep -v "master" | grep -v "*"| xargs git branch -d'
-alias colima-start='colima start --profile amd64 -a x86_64 -c 4 -m 16'
 alias sthe='ssm-tunnel-helper --region us-east-1'
 alias sth='ssm-tunnel-helper'
 alias ae='aws-sso exec'
 alias grs-rp='gh-repo-standardize -s ~/.gh-repo-standardize/rvo-redplatform.settings.json $@'
+
+{{- end }}
+
+alias gitclean='git branch --merged | grep -v "master" | grep -v "*"| xargs git branch -d'
 
 # Displays current shell level
 function prompt_shell_level() {
