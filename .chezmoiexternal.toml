@@ -24,3 +24,33 @@
 	type = "file"
 	url = "https://tpo.pe/pathogen.vim"
 	refreshPeriod = "672h"
+[".vim/bundle/base16-vim"]
+	type = "archive"
+	url = "https://github.com/chriskempson/base16-vim/archive/master.tar.gz"
+	exact = true
+	stripComponents = 1
+	refreshPeriod = "672h"
+[".vim/bundle/nerdtree"]
+    type = "archive"
+    url = "https://github.com/preservim/nerdtree/archive/master.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "672h"
+[".vim/bundle/ale"]
+    type = "archive"
+    url = "https://github.com/dense-analysis/ale/archive/master.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "672h"
+[".vim/bundle/copilot.vim"]
+    type = "archive"
+    url = "https://github.com/github/copilot.vim/archive/release.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "336h"
+[".vim/bundle/vim-airline"]
+    type = "archive"
+    url = "https://github.com/vim-airline/vim-airline/archive/master.tar.gz"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "672h"
