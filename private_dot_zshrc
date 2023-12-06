@@ -1,0 +1,149 @@
+source $HOME/antigen.zsh
+
+# Path to your oh-my-zsh configuration.
+ZSH=$HOME/.oh-my-zsh
+
+# Set name of the theme to load.
+# Look in ~/.oh-my-zsh/themes/
+# Optionally, if you set this to "random", it'll load a random theme each
+# time that oh-my-zsh is loaded.
+ZSH_THEME="af-magic-shlvl"
+
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# Set to this to use case-sensitive completion
+# CASE_SENSITIVE="true"
+
+# Comment this out to disable bi-weekly auto-update checks
+# DISABLE_AUTO_UPDATE="true"
+
+# Uncomment to change how often before auto-updates occur? (in days)
+# export UPDATE_ZSH_DAYS=13
+
+# Uncomment following line if you want to disable colors in ls
+# DISABLE_LS_COLORS="true"
+
+# Uncomment following line if you want to disable autosetting terminal title.
+# DISABLE_AUTO_TITLE="true"
+
+# Uncomment following line if you want to disable command autocorrection
+# DISABLE_CORRECTION="true"
+
+# Uncomment following line if you want red dots to be displayed while waiting for completion
+COMPLETION_WAITING_DOTS="true"
+
+# Uncomment following line if you want to disable marking untracked files under
+# VCS as dirty. This makes repository status check for large repositories much,
+# much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+plugins=(git macos docker docker-compose)
+
+source $ZSH/oh-my-zsh.sh
+
+test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh
+
+eval "$(direnv hook zsh)"
+export NVM_DIR="$HOME/.nvm"
+export NVM_AUTO_USE=true # automatically loads correct node version in presence of .nvmrc
+export NVM_LAZY_LOAD=true
+antigen bundle lukechilds/zsh-nvm
+
+typeset -U path cdpath fpath
+setopt auto_cd
+cdpath=($HOME/Code/github.com/rvohealth $HOME/Code/github.com/rvo-redplatform $HOME/Code/github.com/clocklear)
+
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*:descriptions' format %d
+zstyle ':completion:*:descriptions' format %B%d%b
+zstyle ':completion:*:complete:(cd|pushd):*' tag-order \
+        'local-directories named-directories'
+autoload zmv
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/local/bin/bit bit
+
+# git open
+antigen bundle paulirish/git-open
+
+# atuin shell history
+antigen bundle ellie/atuin@main
+
+antigen apply
+
+ulimit -n 12238
+export GPG_TTY=$(tty)
+
+
+# to add to your ~/.bashrc or your ~/.zshrc file. Usage: $ go switch 1.18.1
+function go() {
+  case $* in
+    switch* )
+        shift 1
+        gobindir=$(go env GOBIN)
+        # adapt to a valid directory at the beginning of your $PATH if you're not on systemd
+        homebindir=$HOME/bin
+        go install golang.org/dl/go"$@"@latest
+        $gobindir/go"$@" download
+        ln -sf $gobindir/go"$@" $homebindir/go
+        echo "$@ was symlinked to $homebindir/go ; You can run 'go version' to check."
+        ;;
+    * )
+        command go "$@"
+        ;;
+  esac
+}
+# BEGIN_AWS_SSO_CLI
+
+# AWS SSO requires `bashcompinit` which needs to be enabled once and
+# only once in your shell.  Hence we do not include the two lines:
+#
+# autoload -Uz +X compinit && compinit
+# autoload -Uz +X bashcompinit && bashcompinit
+#
+# If you do not already have these lines, you must COPY the lines 
+# above, place it OUTSIDE of the BEGIN/END_AWS_SSO_CLI markers
+# and of course uncomment it
+
+__aws_sso_profile_complete() {
+     local _args=${AWS_SSO_HELPER_ARGS:- -L error}
+    _multi_parts : "($(/opt/homebrew/bin/aws-sso ${=_args} list --csv Profile))"
+}
+
+aws-sso-profile() {
+    local _args=${AWS_SSO_HELPER_ARGS:- -L error}
+    if [ -n "$AWS_PROFILE" ]; then
+        echo "Unable to assume a role while AWS_PROFILE is set"
+        return 1
+    fi
+    eval $(/opt/homebrew/bin/aws-sso ${=_args} eval -p "$1")
+    if [ "$AWS_SSO_PROFILE" != "$1" ]; then
+        return 1
+    fi
+}
+
+aws-sso-clear() {
+    local _args=${AWS_SSO_HELPER_ARGS:- -L error}
+    if [ -z "$AWS_SSO_PROFILE" ]; then
+        echo "AWS_SSO_PROFILE is not set"
+        return 1
+    fi
+    eval $(/opt/homebrew/bin/aws-sso ${=_args} eval -c)
+}
+
+compdef __aws_sso_profile_complete aws-sso-profile
+complete -C /opt/homebrew/bin/aws-sso aws-sso
+
+# END_AWS_SSO_CLI
+alias av='aws-vault exec $@'
+alias gitclean='git branch --merged | grep -v "master" | grep -v "*"| xargs git branch -d'
+alias colima-start='colima start --profile amd64 -a x86_64 -c 4 -m 16'
+alias sthe='ssm-tunnel-helper --region us-east-1'
+alias sth='ssm-tunnel-helper'
+alias ae='aws-sso exec'
+alias grs-rp='gh-repo-standardize -s ~/.gh-repo-standardize/rvo-redplatform.settings.json $@'
