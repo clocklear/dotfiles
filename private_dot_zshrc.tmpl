@@ -190,9 +190,9 @@ function prompt_aws_account_alias() {
 	# Check if alias is not already set
     if [ -z $AWS_ACCOUNT_ALIAS ]; then
       if command -v jq >/dev/null 2>&1; then
-        AWS_ACCOUNT_ALIAS="unknown"
-      else
         AWS_ACCOUNT_ALIAS="$(aws iam list-account-aliases | jq -r ".AccountAliases[0]")"
+      else
+        AWS_ACCOUNT_ALIAS="unknown"
       fi
     fi
 
