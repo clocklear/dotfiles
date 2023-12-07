@@ -15,11 +15,14 @@
     url = "https://github.com/romkatv/powerlevel10k/archive/v1.15.0.tar.gz"
     exact = true
     stripComponents = 1
-[".oh-my-zsh/custom/themes"]
-	type = "archive"
-	url = "https://github.com/clocklear/af-magic-shlvl/archive/main.tar.gz"
-	exact = true
-	stripComponents = 1
+[".oh-my-zsh/custom/themes/af-magic-shlvl-awsprofile.zsh-theme"]
+	type = "file"
+	url = "https://gist.githubusercontent.com/clocklear/ba7ea8849d0a36141cd72e356d7e4a8a/raw/4c0fd70c537a32800509fa65d98906853c98be1f/af-magic-shlvl-awsprofile.zsh-theme"
+    refreshPeriod = "672h"
+[".oh-my-zsh/custom/themes/af-magic-shlvl.zsh-theme"]
+	type = "file"
+	url = "https://gist.githubusercontent.com/clocklear/ba7ea8849d0a36141cd72e356d7e4a8a/raw/4c0fd70c537a32800509fa65d98906853c98be1f/af-magic-shlvl.zsh-theme"
+    refreshPeriod = "672h"    
 ["antigen.zsh"]
 	type = "file"
 	url = "https://git.io/antigen"
