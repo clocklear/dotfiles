@@ -81,8 +81,11 @@ complete -o nospace -C /usr/local/bin/bit bit
 # git open
 antigen bundle paulirish/git-open
 
-# atuin shell history
-antigen bundle ellie/atuin@main
+if command -v atuin >/dev/null 2>&1; then
+    # atuin shell history
+    antigen bundle ellie/atuin@main
+fi
+
 
 antigen apply
 
