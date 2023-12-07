@@ -1,0 +1,14 @@
+{{- $username := promptString "username" -}}
+{{- $fullname := promptString "fullname" -}}
+{{- $email := promptString "email" -}}
+{{- $signingKey := promptString "signing key (for git commits)" -}}
+{{- $cdpath := promptString "cd path" -}}
+[git]
+    autoCommit = true
+    autoPush = true
+[data]
+    username = "{{ $username }}"
+    name = "{{ $fullname }}"
+    email = "{{ $email }}"
+    signingkey = "{{ $signingKey }}"
+    cdpath = "{{ $cdpath }}"

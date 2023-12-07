@@ -2,6 +2,6 @@
 .vim/bundle/copilot.vim/doc/tags
 
 README.md
-{{- if not .workmachine }}
+{{- if ne .chezmoi.os "darwin" }}
 .gh-repo-standardize/rvo-redplatform.settings.json
 {{- end }}

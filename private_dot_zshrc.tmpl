@@ -55,8 +55,10 @@ plugins=(git macos docker docker-compose)
 source $ZSH/oh-my-zsh.sh
 
 test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh
+if command -v direnv >/dev/null 2>&1; then
+    eval "$(direnv hook zsh)"
+fi
 
-eval "$(direnv hook zsh)"
 export NVM_DIR="$HOME/.nvm"
 export NVM_AUTO_USE=true # automatically loads correct node version in presence of .nvmrc
 export NVM_LAZY_LOAD=true
@@ -107,59 +109,66 @@ function go() {
   esac
 }
 
-{{- if .workmachine }}
+if command -v aws-sso >/dev/null 2>&1; then
+    # BEGIN_AWS_SSO_CLI
 
-# BEGIN_AWS_SSO_CLI
+    # AWS SSO requires `bashcompinit` which needs to be enabled once and
+    # only once in your shell.  Hence we do not include the two lines:
+    #
+    # autoload -Uz +X compinit && compinit
+    # autoload -Uz +X bashcompinit && bashcompinit
+    #
+    # If you do not already have these lines, you must COPY the lines 
+    # above, place it OUTSIDE of the BEGIN/END_AWS_SSO_CLI markers
+    # and of course uncomment it
 
-# AWS SSO requires `bashcompinit` which needs to be enabled once and
-# only once in your shell.  Hence we do not include the two lines:
-#
-# autoload -Uz +X compinit && compinit
-# autoload -Uz +X bashcompinit && bashcompinit
-#
-# If you do not already have these lines, you must COPY the lines 
-# above, place it OUTSIDE of the BEGIN/END_AWS_SSO_CLI markers
-# and of course uncomment it
+    __aws_sso_profile_complete() {
+        local _args=${AWS_SSO_HELPER_ARGS:- -L error}
+        _multi_parts : "($(aws-sso ${=_args} list --csv Profile))"
+    }
 
-__aws_sso_profile_complete() {
-     local _args=${AWS_SSO_HELPER_ARGS:- -L error}
-    _multi_parts : "($(/opt/homebrew/bin/aws-sso ${=_args} list --csv Profile))"
-}
+    aws-sso-profile() {
+        local _args=${AWS_SSO_HELPER_ARGS:- -L error}
+        if [ -n "$AWS_PROFILE" ]; then
+            echo "Unable to assume a role while AWS_PROFILE is set"
+            return 1
+        fi
+        eval $(aws-sso ${=_args} eval -p "$1")
+        if [ "$AWS_SSO_PROFILE" != "$1" ]; then
+            return 1
+        fi
+    }
 
-aws-sso-profile() {
-    local _args=${AWS_SSO_HELPER_ARGS:- -L error}
-    if [ -n "$AWS_PROFILE" ]; then
-        echo "Unable to assume a role while AWS_PROFILE is set"
-        return 1
-    fi
-    eval $(/opt/homebrew/bin/aws-sso ${=_args} eval -p "$1")
-    if [ "$AWS_SSO_PROFILE" != "$1" ]; then
-        return 1
-    fi
-}
+    aws-sso-clear() {
+        local _args=${AWS_SSO_HELPER_ARGS:- -L error}
+        if [ -z "$AWS_SSO_PROFILE" ]; then
+            echo "AWS_SSO_PROFILE is not set"
+            return 1
+        fi
+        eval $(aws-sso ${=_args} eval -c)
+    }
 
-aws-sso-clear() {
-    local _args=${AWS_SSO_HELPER_ARGS:- -L error}
-    if [ -z "$AWS_SSO_PROFILE" ]; then
-        echo "AWS_SSO_PROFILE is not set"
-        return 1
-    fi
-    eval $(/opt/homebrew/bin/aws-sso ${=_args} eval -c)
-}
+    compdef __aws_sso_profile_complete aws-sso-profile
+    complete -C aws-sso aws-sso
+    
+    alias ae='aws-sso exec'
+    # END_AWS_SSO_CLI
+fi
 
-compdef __aws_sso_profile_complete aws-sso-profile
-complete -C /opt/homebrew/bin/aws-sso aws-sso
-
-# END_AWS_SSO_CLI
-alias av='aws-vault exec $@'
-alias sthe='ssm-tunnel-helper --region us-east-1'
-alias sth='ssm-tunnel-helper'
-alias ae='aws-sso exec'
-alias grs-rp='gh-repo-standardize -s ~/.gh-repo-standardize/rvo-redplatform.settings.json $@'
-
-{{- end }}
+if command -v aws-vault >/dev/null 2>&1; then
+  alias av='aws-vault exec $@'
+fi
+if command -v ssm-tunnel-helper >/dev/null 2>&1; then
+  alias sthe='ssm-tunnel-helper --region us-east-1'
+  alias sth='ssm-tunnel-helper'
+fi
+if command -v gh-repo-standardize >/dev/null 2>&1; then
+  alias grs='gh-repo-standardize -s ~/.gh-repo-standardize/rvo.settings.json $@'
+  test -e ${HOME}/.gh-repo-standardize/rvo-redplatform.settings.json && alias grs-rp='gh-repo-standardize -s ~/.gh-repo-standardize/rvo-redplatform.settings.json $@'
+fi
 
 alias gitclean='git branch --merged | grep -v "master" | grep -v "*"| xargs git branch -d'
+alias cz=chezmoi
 
 # Displays current shell level
 function prompt_shell_level() {
@@ -169,6 +178,7 @@ function prompt_shell_level() {
 }
 
 # Displays current AWS account alias
+
 function prompt_aws_account_alias() {
   if [ ! -z $AWS_ACCESS_KEY_ID ]; then
     # Define color
@@ -176,7 +186,11 @@ function prompt_aws_account_alias() {
 
 	# Check if alias is not already set
     if [ -z $AWS_ACCOUNT_ALIAS ]; then
-      AWS_ACCOUNT_ALIAS="$(aws iam list-account-aliases | jq -r ".AccountAliases[0]")"
+      if command -v jq >/dev/null 2>&1; then
+        AWS_ACCOUNT_ALIAS="unknown"
+      else
+        AWS_ACCOUNT_ALIAS="$(aws iam list-account-aliases | jq -r ".AccountAliases[0]")"
+      fi
     fi
 
     if [[ $AWS_ACCOUNT_ALIAS == *"-prod"* ]]; then

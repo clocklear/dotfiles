@@ -7,7 +7,7 @@
 [mergetool]
 	keepBackup = true
 [core]
-	excludesfile = /Users/clocklear/.gitignore_global
+	excludesfile = /Users/{{ .username }}/.gitignore_global
 	editor = /usr/bin/vim
 	preloadindex = true
 	fscache = true
@@ -43,7 +43,7 @@
 [pull]
 	rebase = false
 	#ff = only
-{{- if .workmachine }}
+{{- if eq .chezmoi.os "darwin" }}
 [gpg "ssh"]
 	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
 {{- end }}
