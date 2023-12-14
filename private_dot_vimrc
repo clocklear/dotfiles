@@ -31,3 +31,6 @@ set guifont=Menlo\ For\ Powerline:h13
 set tabstop=4
 set shiftwidth=4
 set backspace=indent,eol,start
+
+colorscheme base16-tomorrow-night
+set termguicolors
