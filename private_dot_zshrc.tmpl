@@ -170,6 +170,9 @@ if command -v gh-repo-standardize >/dev/null 2>&1; then
   alias grs='gh-repo-standardize -s ~/.gh-repo-standardize/rvo.settings.json $@'
   test -e ${HOME}/.gh-repo-standardize/rvo-redplatform.settings.json && alias grs-rp='gh-repo-standardize -s ~/.gh-repo-standardize/rvo-redplatform.settings.json $@'
 fi
+if [ -f /opt/homebrew/opt/asdf/libexec/asdf.sh ]; then
+    . /opt/homebrew/opt/asdf/libexec/asdf.sh
+fi
 
 alias gitclean='git branch --merged | grep -v "master" | grep -v "*"| xargs git branch -d'
 alias cz=chezmoi
