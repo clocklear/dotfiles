@@ -209,5 +209,14 @@ function prompt_aws_account_alias() {
   fi
 }
 
+if [ -f /home/linuxbrew/.linuxbrew ]; then
+	export HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew";
+	export HOMEBREW_CELLAR="/home/linuxbrew/.linuxbrew/Cellar";
+	export HOMEBREW_REPOSITORY="/home/linuxbrew/.linuxbrew/Homebrew";
+	export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin${PATH+:$PATH}";
+	export MANPATH="/home/linuxbrew/.linuxbrew/share/man${MANPATH+:$MANPATH}:";
+	export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:${INFOPATH:-}";
+fi
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
