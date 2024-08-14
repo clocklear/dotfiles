@@ -60,7 +60,7 @@ COMPLETION_WAITING_DOTS="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git macos docker docker-compose)
+plugins=(git macos docker docker-compose asdf)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -68,11 +68,6 @@ test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_in
 if command -v direnv >/dev/null 2>&1; then
     eval "$(direnv hook zsh)"
 fi
-
-export NVM_DIR="$HOME/.nvm"
-export NVM_AUTO_USE=true # automatically loads correct node version in presence of .nvmrc
-export NVM_LAZY_LOAD=true
-antigen bundle lukechilds/zsh-nvm
 
 typeset -U path cdpath fpath
 setopt auto_cd
