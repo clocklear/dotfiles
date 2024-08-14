@@ -108,13 +108,29 @@ function go() {
   case $* in
     switch* )
         shift 1
-        gobindir=$(go env GOBIN)
-        # adapt to a valid directory at the beginning of your $PATH if you're not on systemd
+        
+        # Handle 'v' prefix in the version number
+        version=$1
+        if [[ $version == v* ]]; then
+            version=${version#v}
+        fi
+
+        # Set default Go binary directory if GOBIN is not set
+        gobindir=$(go env GOBIN 2>/dev/null || command which go | sed 's/\/go$//')
+        
+        # Stop execution on any error
+        set -e
+
+        # Adapt to a valid directory at the beginning of your $PATH if you're not on systemd
         homebindir=$HOME/bin
-        go install golang.org/dl/go"$@"@latest
-        $gobindir/go"$@" download
-        ln -sf $gobindir/go"$@" $homebindir/go
-        echo "$@ was symlinked to $homebindir/go ; You can run 'go version' to check."
+
+        # Install the specified version and download it
+        go install golang.org/dl/go"$version"@latest
+        $gobindir/go"$version" download
+
+        # Create a symbolic link to the specified version
+        ln -sf $gobindir/go"$version" $homebindir/go
+        echo "go$version was symlinked to $homebindir/go ; You can run 'go version' to check."
         ;;
     * )
         command go "$@"
