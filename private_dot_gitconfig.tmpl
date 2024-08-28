@@ -59,3 +59,7 @@
 	conflictstyle = diff3
 [diff]
 	colorMoved = default
+{{ if (eq (lstat "/Users/clocklear/.zscaler_ca_certs/ZscalerRoot.pem").type "file") }}
+[http]
+    sslCAInfo = /Users/clocklear/.zscaler_ca_certs/ZscalerRoot.pem
+{{ end }}
