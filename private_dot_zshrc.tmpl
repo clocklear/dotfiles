@@ -1,13 +1,13 @@
-if command -v direnv >/dev/null 2>&1; then
-    emulate zsh -c "$(direnv hook zsh)"
-fi
-
+(( ${+commands[direnv]} )) && emulate zsh -c "$(direnv export zsh)"
+	
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
+
+(( ${+commands[direnv]} )) && emulate zsh -c "$(direnv hook zsh)"
 
 if [[ -d /home/linuxbrew/.linuxbrew ]]; then
     export HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew";
@@ -68,9 +68,6 @@ plugins=(git macos docker docker-compose asdf)
 source $ZSH/oh-my-zsh.sh
 
 test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh
-if command -v direnv >/dev/null 2>&1; then
-    emulate zsh -c "$(direnv hook zsh)"
-fi
 
 typeset -U path cdpath fpath
 setopt auto_cd
