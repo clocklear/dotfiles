@@ -34,3 +34,6 @@ set backspace=indent,eol,start
 
 colorscheme base16-tomorrow-night
 set termguicolors
+
+autocmd BufRead,BufNewFile *.zshrc.tmpl set filetype=zsh
+autocmd BufRead,BufNewFile *.gitconfig.tmpl set filetype=gitconfig
