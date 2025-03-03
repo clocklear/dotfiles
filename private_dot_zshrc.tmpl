@@ -63,7 +63,7 @@ COMPLETION_WAITING_DOTS="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git macos docker docker-compose asdf)
+plugins=(git macos docker docker-compose)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -190,9 +190,10 @@ if command -v gh-repo-standardize >/dev/null 2>&1; then
   alias grs='gh-repo-standardize -s ~/.gh-repo-standardize/rvo.settings.json $@'
   test -e ${HOME}/.gh-repo-standardize/rvo-redplatform.settings.json && alias grs-rp='gh-repo-standardize -s ~/.gh-repo-standardize/rvo-redplatform.settings.json $@'
 fi
-if [ -f /opt/homebrew/opt/asdf/libexec/asdf.sh ]; then
-    . /opt/homebrew/opt/asdf/libexec/asdf.sh
-fi
+# relies on asdf 0.15.x or newer
+#if [ -f /opt/homebrew/opt/asdf/libexec/asdf.sh ]; then
+#    . /opt/homebrew/opt/asdf/libexec/asdf.sh
+#fi
 
 alias gitclean='git branch --merged | grep -v "master" | grep -v "*"| xargs git branch -d'
 alias cz=chezmoi
