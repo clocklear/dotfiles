@@ -197,6 +197,7 @@ fi
 
 alias gitclean='git branch --merged | grep -v "master" | grep -v "*"| xargs git branch -d'
 alias cz=chezmoi
+alias awslocal='aws --endpoint-url=http://localhost:4566'
 
 # Displays current shell level
 function prompt_shell_level() {
