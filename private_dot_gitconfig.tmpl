@@ -12,6 +12,9 @@
 	preloadindex = true
 	fscache = true
 	quotepath = false
+{{- if eq .chezmoi.config.hostname "OfficePC" }}
+	sshCommand = ssh.exe
+{{- end }}
 [init]
 	defaultBranch = main
 [push]
