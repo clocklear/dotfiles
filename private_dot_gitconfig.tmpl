@@ -12,8 +12,8 @@
 	preloadindex = true
 	fscache = true
 	quotepath = false
-{{- if eq .chezmoi.config.hostname "OfficePC" }}
-	sshCommand = ssh.exe
+{{- if eq .chezmoi.hostname "OfficePC" }}
+    sshCommand = ssh.exe
 {{- end }}
 [init]
 	defaultBranch = main
@@ -24,6 +24,11 @@
 	gpgsign = true
 [gpg]
 	format = ssh
+{{- if eq .chezmoi.hostname "OfficePC" }}
+[gpg "ssh"]
+    program = "/mnt/c/Users/coryl/AppData/Local/1Password/app/8/op-ssh-sign-wsl"
+
+{{- end }}
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
