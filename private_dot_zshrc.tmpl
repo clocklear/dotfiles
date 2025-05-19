@@ -182,18 +182,6 @@ fi
 if command -v aws-vault >/dev/null 2>&1; then
   alias av='aws-vault exec $@'
 fi
-if command -v ssm-tunnel-helper >/dev/null 2>&1; then
-  alias sthe='ssm-tunnel-helper --region us-east-1'
-  alias sth='ssm-tunnel-helper'
-fi
-if command -v gh-repo-standardize >/dev/null 2>&1; then
-  alias grs='gh-repo-standardize -s ~/.gh-repo-standardize/rvo.settings.json $@'
-  test -e ${HOME}/.gh-repo-standardize/rvo-redplatform.settings.json && alias grs-rp='gh-repo-standardize -s ~/.gh-repo-standardize/rvo-redplatform.settings.json $@'
-fi
-# relies on asdf 0.15.x or newer
-#if [ -f /opt/homebrew/opt/asdf/libexec/asdf.sh ]; then
-#    . /opt/homebrew/opt/asdf/libexec/asdf.sh
-#fi
 
 alias gitclean='git branch --merged | grep -v "master" | grep -v "*"| xargs git branch -d'
 alias cz=chezmoi
