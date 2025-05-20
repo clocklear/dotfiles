@@ -1,9 +1,9 @@
 [user]
 	name = {{ .name }}
 	email = {{ .email }}
-{{ if .signingkey -}}
+{{- if .signingkey }}
 	signingkey = {{ .signingkey }}
-{{ end }}
+{{- end }}
 [url "ssh://git@github.com/"]
 	insteadOf = https://github.com/
 [mergetool]
