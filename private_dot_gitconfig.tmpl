@@ -53,7 +53,7 @@
 [pull]
 	rebase = false
 	#ff = only
-{{- if and (eq .chezmoi.os "darwin") (ne .chezmoi.hostname "CN7WFR2X7Q" }}
+{{- if and (eq .chezmoi.os "darwin") (ne .chezmoi.hostname "CN7WFR2X7Q") }}
 [gpg "ssh"]
 	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
 {{- end }}
