@@ -1,7 +1,9 @@
 [user]
 	name = {{ .name }}
 	email = {{ .email }}
+{{ if .signingkey -}}
 	signingkey = {{ .signingkey }}
+{{ end -}}
 [url "ssh://git@github.com/"]
 	insteadOf = https://github.com/
 [mergetool]
@@ -51,7 +53,7 @@
 [pull]
 	rebase = false
 	#ff = only
-{{- if eq .chezmoi.os "darwin" }}
+{{- if and (eq .chezmoi.os "darwin") (ne .chezmoi.hostname "CN7WFR2X7Q" }}
 [gpg "ssh"]
 	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
 {{- end }}
@@ -67,8 +69,3 @@
 	conflictstyle = diff3
 [diff]
 	colorMoved = default
-{{ $stat := lstat "/Users/clocklear/.zscaler_ca_certs/ZscalerRoot.pem" }}
-{{ if and $stat (eq $stat.type "file") }}
-[http]
-	sslCAInfo = /Users/clocklear/.zscaler_ca_certs/ZscalerRoot.pem
-{{ end }}
