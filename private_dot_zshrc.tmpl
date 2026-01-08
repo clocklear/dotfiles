@@ -145,6 +145,10 @@ if command -v aws-sso >/dev/null 2>&1; then
     # END_AWS_SSO_CLI
 fi
 
+{{- if lookPath "mise" -}}
+eval "$(mise activate zsh)"
+{{- end -}}
+
 alias gitclean='git branch --merged | grep -v "master" | grep -v "*"| xargs git branch -d'
 alias cz=chezmoi
 alias awslocal='aws --endpoint-url=http://localhost:4566'
