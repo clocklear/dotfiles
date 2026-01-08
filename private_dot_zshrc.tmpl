@@ -63,7 +63,7 @@ COMPLETION_WAITING_DOTS="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git macos docker docker-compose)
+plugins=(git docker docker-compose)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -98,40 +98,6 @@ ulimit -n 12238
 export GPG_TTY=$(tty)
 
 
-# to add to your ~/.bashrc or your ~/.zshrc file. Usage: $ go switch 1.18.1
-function go() {
-  case $* in
-    switch* )
-        shift 1
-        
-        # Handle 'v' prefix in the version number
-        version=$1
-        if [[ $version == v* ]]; then
-            version=${version#v}
-        fi
-
-        # Set default Go binary directory if GOBIN is not set
-        gobindir=$(go env GOBIN 2>/dev/null || command which go | sed 's/\/go$//')
-        
-        # Stop execution on any error
-        set -e
-
-        # Adapt to a valid directory at the beginning of your $PATH if you're not on systemd
-        homebindir=$HOME/bin
-
-        # Install the specified version and download it
-        go install golang.org/dl/go"$version"@latest
-        $gobindir/go"$version" download
-
-        # Create a symbolic link to the specified version
-        ln -sf $gobindir/go"$version" $homebindir/go
-        echo "go$version was symlinked to $homebindir/go ; You can run 'go version' to check."
-        ;;
-    * )
-        command go "$@"
-        ;;
-  esac
-}
 
 if command -v aws-sso >/dev/null 2>&1; then
     # BEGIN_AWS_SSO_CLI
@@ -177,10 +143,6 @@ if command -v aws-sso >/dev/null 2>&1; then
     
     alias ae='aws-sso exec'
     # END_AWS_SSO_CLI
-fi
-
-if command -v aws-vault >/dev/null 2>&1; then
-  alias av='aws-vault exec $@'
 fi
 
 alias gitclean='git branch --merged | grep -v "master" | grep -v "*"| xargs git branch -d'
