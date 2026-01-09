@@ -1,71 +1,64 @@
 [user]
 	name = {{ .name }}
 	email = {{ .email }}
-{{- if .signingkey }}
-	signingkey = {{ .signingkey }}
-{{- end }}
+
 [url "ssh://git@github.com/"]
 	insteadOf = https://github.com/
+
 [mergetool]
 	keepBackup = true
+
+[init]
+	defaultBranch = main
+
+[push]
+	default = current
+
+[pull]
+	rebase = false
+
+[commit]
+	gpgsign = true
+
+[gpg]
+	format = ssh
+
 [core]
-	excludesfile = /Users/{{ .username }}/.gitignore_global
 	editor = /usr/bin/vim
 	preloadindex = true
 	fscache = true
 	quotepath = false
-{{- if eq .chezmoi.hostname "OfficePC" }}
-    sshCommand = ssh.exe
-{{- end }}
-[init]
-	defaultBranch = main
-[push]
-	default = current
-[commit]
-	template = /Users/{{ .username }}/.stCommitMsg
-	gpgsign = true
-[gpg]
-	format = ssh
-{{- if eq .chezmoi.hostname "OfficePC" }}
-[gpg "ssh"]
-    program = "/mnt/c/Users/coryl/AppData/Local/1Password/app/8/op-ssh-sign-wsl"
+	pager = delta
 
-{{- end }}
+[interactive]
+	diffFilter = delta --color-only
+
+[delta]
+	navigate = true
+	light = false
+	side-by-side = true
+
+[merge]
+	conflictstyle = diff3
+
+[diff]
+	colorMoved = default
+
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+
 [alias]
-    set-upstream = \
-       !git branch \
-		--set-upstream-to=origin/`git symbolic-ref --short HEAD`
-	prune-origin = \
-		!git remote prune origin && git branch -vv | cut -c 3- | awk '$3 !~/\\[/ { print $1 }' | xargs git branch -d
-	force-prune-origin = \
-		!git remote prune origin && git branch -vv | cut -c 3- | awk '$3 !~/\\[/ { print $1 }' | xargs git branch -D
-    prune-origin-force = \
-        !git remote prune origin && git branch -vv | cut -c 3- | awk '$3 !~/\\[/ { print $1 }' | xargs git branch -D
-	last-commit = \
-		!git rev-parse HEAD
-	rollback = \
-		!git reset HEAD~
-[pull]
-	rebase = false
-	#ff = only
-{{- if and (eq .chezmoi.os "darwin") (ne .chezmoi.hostname "CN7WFR2X7Q") }}
-[gpg "ssh"]
-	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
-{{- end }}
-[core]
-	pager = delta
-[interactive]
-	diffFilter = delta --color-only
-[delta]
-	navigate = true
-	light = false
-	side-by-side = true
-[merge]
-	conflictstyle = diff3
-[diff]
-	colorMoved = default
+	set-upstream = !git branch --set-upstream-to=origin/`git symbolic-ref --short HEAD`
+	prune-origin = !git remote prune origin && git branch -vv | cut -c 3- | awk '$3 !~/\\[/ { print $1 }' | xargs git branch -d
+	force-prune-origin = !git remote prune origin && git branch -vv | cut -c 3- | awk '$3 !~/\\[/ { print $1 }' | xargs git branch -D
+	prune-origin-force = !git remote prune origin && git branch -vv | cut -c 3- | awk '$3 !~/\\[/ { print $1 }' | xargs git branch -D
+	last-commit = !git rev-parse HEAD
+	rollback = !git reset HEAD~
+
+# Load machine-specific overrides (created once, then unmanaged)
+[include]
+	path = ~/.gitconfig.local
+
