@@ -1,0 +1,10 @@
+#!/bin/sh
+set -eu
+
+if ! command -v mise >/dev/null 2>&1; then
+  echo "Installing mise..."
+  curl https://mise.run | sh
+else
+  echo "mise already installed, skipping"
+fi
+
