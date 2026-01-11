@@ -1,0 +1,17 @@
+#!/bin/sh
+set -eu
+
+target="$HOME/.gitconfig.local"
+
+# Write-once behavior: if it exists, do nothing.
+if [ -e "$target" ]; then
+  exit 0
+fi
+
+# Render the starter template into place
+srcdir="$(chezmoi execute-template '{{ .chezmoi.sourceDir }}')"
+chezmoi execute-template --file "$srcdir/gitconfig.local.tmpl" > "$target"
+
+chmod 600 "$target"
+echo "Created $target. You can edit it freely; chezmoi will ignore it."
+

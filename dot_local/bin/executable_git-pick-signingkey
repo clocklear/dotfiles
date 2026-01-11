@@ -1,0 +1,65 @@
+#!/bin/sh
+set -eu
+
+TARGET="${HOME}/.gitconfig.local"
+
+# Must have ssh-add and git
+command -v ssh-add >/dev/null 2>&1 || { echo "ssh-add not found" >&2; exit 1; }
+command -v git >/dev/null 2>&1 || { echo "git not found" >&2; exit 1; }
+
+# Fetch keys from agent
+keys="$(ssh-add -L 2>/dev/null || true)"
+
+# Detect no-agent / no-keys conditions
+case "$keys" in
+  ""|*"The agent has no identities."*)
+    echo "No SSH keys available from your agent." >&2
+    echo "If you use 1Password: enable SSH agent in 1Password and open a new terminal." >&2
+    echo "Then confirm with: ssh-add -L" >&2
+    exit 1
+    ;;
+esac
+
+# Convert keys to a numbered list
+echo "Select a key for Git SSH commit signing:"
+echo
+
+# Print menu
+i=1
+printf '%s\n' "$keys" | while IFS= read -r line; do
+  printf '%2d) %s\n' "$i" "$line"
+  i=$((i+1))
+done
+
+# Read a clean numeric choice
+printf "Enter number: "
+IFS= read -r choice
+
+# Require digits only
+case "$choice" in
+  *[!0-9]*|"")
+    echo "Please enter a number (e.g. 1)." >&2
+    exit 1
+    ;;
+esac
+
+chosen="$(printf '%s\n' "$keys" | sed -n "${choice}p")"
+
+if [ -z "$chosen" ]; then
+  echo "Invalid selection." >&2
+  exit 1
+fi
+
+# Write to your local include if it exists; otherwise global
+if [ -f "$TARGET" ]; then
+  git config --file "$TARGET" user.signingkey "$chosen"
+  echo "Wrote user.signingkey to $TARGET"
+else
+  git config --global user.signingkey "$chosen"
+  echo "Wrote user.signingkey to global git config"
+fi
+
+echo
+echo "Configured user.signingkey to:"
+echo "$chosen"
+

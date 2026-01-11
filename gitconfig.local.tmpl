@@ -1,0 +1,31 @@
+# Machine-specific paths only
+
+{{- if eq .chezmoi.os "darwin" }}
+[core]
+	excludesfile = /Users/{{ .username }}/.gitignore_global
+[commit]
+	template = /Users/{{ .username }}/.stCommitMsg
+
+[gpg "ssh"]
+	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+{{- end }}
+
+{{- if eq .chezmoi.os "linux" }}
+[core]
+	excludesfile = /home/{{ .username }}/.gitignore_global
+[commit]
+	template = /home/{{ .username }}/.stCommitMsg
+
+[gpg "ssh"]
+	program = "/opt/1Password/op-ssh-sign"
+{{- end }}
+
+{{- if and (eq .chezmoi.os "linux") ((.chezmoi.kernel.osrelease | lower) | contains "microsoft") }}
+[core]
+	sshCommand = ssh.exe
+
+[gpg "ssh"]
+	# Assumes Windows username matches Linux username
+	program = "/mnt/c/Users/{{ .username }}/AppData/Local/1Password/app/8/op-ssh-sign-wsl"
+{{- end }}
+

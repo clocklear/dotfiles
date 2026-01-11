@@ -18,6 +18,12 @@ if [[ -d /home/linuxbrew/.linuxbrew ]]; then
     export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:${INFOPATH:-}";
 fi
 
+# 1Password SSH agent (Linux)
+if [[ -S "$HOME/.1password/agent.sock" ]]; then
+  export SSH_AUTH_SOCK="$HOME/.1password/agent.sock"
+fi
+
+
 source $HOME/antigen.zsh
 
 # Path to your oh-my-zsh configuration.
