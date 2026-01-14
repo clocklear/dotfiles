@@ -167,6 +167,8 @@ elif command -v xclip >/dev/null 2>&1; then
 fi
 alias awslocal='aws --endpoint-url=http://localhost:4566'
 
+[[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code --locate-shell-integration-path zsh)"
+
 # Displays current shell level
 function prompt_shell_level() {
   if [ $SHLVL -gt 1 ]; then
